@@ -48,7 +48,7 @@ To start Standalone React now run this command to install dependencies inside.
 
     or
 
-    $ npm i
+    $ npx @standalone-stacks/react-ts <project name>
 
 
 commands available
