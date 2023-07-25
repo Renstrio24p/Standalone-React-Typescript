@@ -1,5 +1,6 @@
 import React from "react"
-import ReactApp from "./react-18/react"
+import ReactApp from "./components/react"
+
 
 export default function Start(){
     return (
