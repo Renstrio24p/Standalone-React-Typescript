@@ -22,15 +22,10 @@ module.exports = {
     liveReload: true,
   },
   resolve: {
-    extensions: [".js", ".jsx", ".ts", ".tsx", ".json",'.scss']
+    extensions: [".js",".ts", ".tsx", ".json",'.scss']
   },
   module: {
     rules: [
-      {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: 'babel-loader',
-      },
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
