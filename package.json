@@ -14,7 +14,7 @@
   "devDependencies": {
     "@babel/register": "^7.22.5",
     "@swc/register": "^0.1.10",
-    "@types/react": "^18.2.14",
+    "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.6",
     "css-loader": "^6.8.1",
     "esbuild-register": "^3.4.2",
