@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client'
 import './assets/css/index.css'
 import Start from './start'
 
-const DOM = ReactDOM.createRoot(document.getElementById('root')as HTMLElement)
+const DOM = ReactDOM.createRoot(document.getElementById('root') as HTMLDivElement)
 DOM.render (
     <React.StrictMode>
         <Start />
