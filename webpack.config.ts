@@ -1,23 +1,22 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
-  entry: './src/index.tsx',
+  entry: './src/index.tsx', // Changed entry to .tsx
   mode: 'development',
   output: {
     path: path.resolve(__dirname, './dist'),
-    filename: 'webpack.bundle.[contenthash].js',
+    filename: 'assets/[name].[contenthash].js', // Use contenthash for cache-busting
     clean: true,
   },
   target: 'web',
   devServer: {
-    port: 5600,
+    port: 4500,
     static: {
-      directory: path.join(__dirname, 'src/assets'),
-      watch: true,
+      directory: path.join(__dirname, 'src'),
     },
     open: true,
     hot: true,
@@ -26,51 +25,60 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.ts', '.tsx', '.json', '.scss'],
   },
-  optimization: {
-    minimize: true,
-    minimizer: [new TerserPlugin()],
-    splitChunks: {
-      chunks: 'all',
-    },
-  },
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
+        test: /\.tsx?$/, // Process .tsx files only
         exclude: /node_modules/,
+        use: 'ts-loader', // Use ts-loader for TypeScript files
       },
       {
-        test: /\.module\.(sa|sc|c)ss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: { modules: true },
-          },
-          'sass-loader',
-        ],
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.(sa|sc|c)ss$/,
-        exclude: /\.module\.(sa|sc|c)ss$/,
+        test: /\.s[ac]ss$/i,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(png|jpe?g|gif|svg|webp)$/i,
         type: 'asset/resource',
         generator: {
-          filename: 'images/[name].[hash][ext]',
+          filename: 'images/[name].[contenthash][ext]', // Output path for images
         },
       },
       {
         test: /\.(mp4|webm|ogg|ogv)$/i,
         type: 'asset/resource',
         generator: {
-          filename: 'videos/[name].[hash][ext]',
+          filename: 'videos/[name].[contenthash][ext]', // Output path for videos
         },
       },
     ],
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [
+      new CssMinimizerPlugin(), // Minimize CSS
+      new TerserPlugin(), // Minimize JavaScript
+    ],
+    splitChunks: {
+      chunks: 'async',
+      minSize: 2000, // Adjust this value as needed, e.g., 20000 bytes
+      maxSize: 20000,
+      minChunks: 1,
+      maxAsyncRequests: 30,
+      maxInitialRequests: 30,
+      automaticNameDelimiter: '~',
+      enforceSizeThreshold: 50000,
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all',
+        },
+      },
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({
@@ -78,10 +86,21 @@ module.exports = {
     }),
     new CopyPlugin({
       patterns: [
-        { from: 'src/assets/images', to: 'images' },
-        // { from: 'src/assets/videos', to: 'videos' },
+        {
+          from: 'src/images',
+          to: 'images',
+          globOptions: {
+            ignore: ['**/placeholder.png'], // Ignore specific files if needed
+          },
+        },
+        {
+          from: 'src/videos',
+          to: 'videos',
+          globOptions: {
+            ignore: ['**/*.tmp'], // Ignore specific files if needed
+          },
+        },
       ],
     }),
-    new MiniCssExtractPlugin({ filename: 'styles.[contenthash].css' }),
   ],
 };
