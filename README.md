@@ -9,6 +9,7 @@ version update 1.0.6
     - add image linking for src='images/filename.jpg'
     - add video linking for src='videos/filenmae.mp4'
     - minimizer chunksize js - webpack js update
+    - css / scss and utils are inside Assets folder
 
 version update 1.0.5
 
