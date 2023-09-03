@@ -31,9 +31,9 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.tsx?$/, // Process .tsx files only
+        test: /\.tsx?$/, 
         exclude: /node_modules/,
-        use: 'ts-loader', // Use ts-loader for TypeScript files
+        use: 'ts-loader', 
       },
       {
         test: /\.css$/i,
@@ -89,3 +89,5 @@ module.exports = {
     }),
   ],
 };
+
+// You must not modify this configuration for webpack ts unless you are a tester.
