@@ -73,6 +73,16 @@
     color: #fff;
 }
 
+.react-js {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.typescript-img {
+    width: 20px;
+}
+
 .footer {
     width: 100%;
     display: flex;

@@ -8,11 +8,11 @@ export default function ReactApp() {
                 <div className={styles["react-head"]}>
                     <a href="https://react.dev/"><img src="images/react.svg" className={styles.react}></img></a>
                     <div className={styles["react-text"]}>
-                         <h1 className={styles["react-header"]}>Standalone React Typescript</h1>
+                         <h1 className={styles["react-header"]}>Standalone React TS</h1>
                          <p className={styles['react-pgraph']}> 
                            <span className={styles["react-title"]}>Make your life simple and organize with </span> 
                              <img src="images/react.svg" className={styles["react-img"]}></img>
-                             <span className={styles['react-js']}> React TS.</span> 
+                             <span className={styles['react-js']}> React + <img src="images/Typescript.png" className={styles['typescript-img']}/></span> 
                          </p>
                          <p className={styles["react-title"]}>Webpack Version. supports Codespace and Typescript</p>
                         
