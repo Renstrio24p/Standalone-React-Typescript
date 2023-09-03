@@ -90,4 +90,4 @@ module.exports = {
   ],
 };
 
-// You must not modify this configuration for webpack ts unless you are a tester.
+// You should not alter this webpack.ts configuration unless you are a tester.
