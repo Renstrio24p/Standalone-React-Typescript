@@ -2,9 +2,9 @@ const fs = require('fs-extra');
 const pathfile = require('path');
 
 const srcImagesDir = pathfile.join(__dirname, 'src/images');
-const srcVideosDir = pathfile.join(__dirname, 'src/images/videos');
+const srcVideosDir = pathfile.join(__dirname, 'src/videos');
 const distImagesDir = pathfile.join(__dirname, 'dist/images');
-const distVideosDir = pathfile.join(__dirname, 'dist/images/videos');
+const distVideosDir = pathfile.join(__dirname, 'dist/videos');
 
 // Check if the source directories exist
 const imagesExist = fs.existsSync(srcImagesDir);
