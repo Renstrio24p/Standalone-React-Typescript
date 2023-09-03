@@ -12,7 +12,7 @@ export default function ReactApp() {
                          <p className={styles['react-pgraph']}> 
                            <span className={styles["react-title"]}>Make your life simple and organize with </span> 
                              <img src="images/react.svg" className={styles["react-img"]}></img>
-                             <span className={styles['react-js']}> React JS.</span> 
+                             <span className={styles['react-js']}> React TS.</span> 
                          </p>
                          <p className={styles["react-title"]}>Webpack Version. supports Codespace and Typescript</p>
                         

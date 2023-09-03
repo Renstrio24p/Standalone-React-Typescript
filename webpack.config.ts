@@ -4,17 +4,20 @@ const path = require('path');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
+const { execSync } = require('child_process');
+
+execSync('node webpack.test.ts');
+
 module.exports = {
-  entry: './src/index.tsx', // Changed entry to .tsx
+  entry: './src/index.tsx',
   mode: 'development',
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'assets/[name].[contenthash].js', // Use contenthash for cache-busting
-    clean: true,
   },
   target: 'web',
   devServer: {
-    port: 4500,
+    port: 4600,
     static: {
       directory: path.join(__dirname, 'src'),
     },
@@ -83,24 +86,6 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: path.join(__dirname, './', 'index.html'),
-    }),
-    new CopyPlugin({
-      patterns: [
-        {
-          from: 'src/images',
-          to: 'images',
-          globOptions: {
-            ignore: ['**/placeholder.png'], // Ignore specific files if needed
-          },
-        },
-        {
-          from: 'src/videos',
-          to: 'videos',
-          globOptions: {
-            ignore: ['**/*.tmp'], // Ignore specific files if needed
-          },
-        },
-      ],
     }),
   ],
 };
