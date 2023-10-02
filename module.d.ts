@@ -1,11 +1,22 @@
-declare module "*";
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { Root } from 'react-dom/client';
 
-declare module "*.module.css" {
-  const classes: { [key: string]: string };
-  export default classes;
-}
+declare global {
+  const React: typeof React;
+  const ReactDOM: typeof ReactDOM;
 
-declare module "*.module.scss" {
-  const classes: { [key: string]: string };
-  export default classes;
+  const createRoot: (container: Element | DocumentFragment | null) => Root;
+
+  declare module "*";
+
+  declare module "*.module.css" {
+    const classes: { [key: string]: string };
+    export default classes;
+  }
+
+  declare module "*.module.scss" {
+    const classes: { [key: string]: string };
+    export default classes;
+  }
 }
