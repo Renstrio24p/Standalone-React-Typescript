@@ -19,4 +19,10 @@ declare global {
     const classes: { [key: string]: string };
     export default classes;
   }
+
+  namespace JSX {
+    interface IntrinsicElements {
+      [elemName: string]: any;
+    }
+  }
 }
