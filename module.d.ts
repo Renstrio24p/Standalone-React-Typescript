@@ -1,7 +1,9 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import * as path from 'path';
 import { Root } from 'react-dom/client';
 
+// Declare the exports of the 'react' and 'react-dom' modules
 declare global {
   const React: typeof React;
   const ReactDOM: typeof ReactDOM;
@@ -26,3 +28,10 @@ declare global {
     }
   }
 }
+
+export {
+  React,
+  ReactDOM,
+  createRoot,
+  path,
+};

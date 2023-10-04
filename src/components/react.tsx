@@ -1,4 +1,3 @@
-import React from "react"
 import styles from '../assets/css/modules/app.module.css';
 
 export default function ReactApp() {

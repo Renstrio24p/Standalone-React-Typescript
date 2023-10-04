@@ -1,11 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import './assets/css/index.css'
-import Start from './Start'
 
-const DOM = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+const Start = React.lazy(() => import('./Start'));
+
+const DOM = ReactDOM.createRoot(document.getElementById('root') as HTMLDivElement)
 DOM.render (
     <React.StrictMode>
-        <Start />
+        <React.Suspense fallback={<div>Loading...</div>}>
+            <Start />
+        </React.Suspense>
     </React.StrictMode>
 )
+
+// React Webpack 5.88.2 Fallbacks and Lazy Load

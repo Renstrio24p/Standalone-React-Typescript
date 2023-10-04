@@ -5,10 +5,8 @@ const CopyWebpack = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const webpack = require('webpack');
 const path = require('path');
-
 module.exports = {
   entry: './src/index.tsx',
-  mode: 'development',
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'assets/[name].[contenthash].js',
@@ -116,6 +114,7 @@ module.exports = {
     }),
     new Dotenv(),
   ],
+  devtool: 'source-map',
 };
 
 // You should not alter this webpack.ts configuration unless you are a tester.
