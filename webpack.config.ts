@@ -12,7 +12,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'assets/[name].[contenthash].js',
-    publicPath: '/'
+    // publicPath: '/' // for serverside and react-router-dom
   },
   target: 'web',
   devServer: {
