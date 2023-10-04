@@ -1,5 +1,5 @@
 {
-  "name": "standalone-react-typescript",
+  "name": "standalone-react-ts",
   "version": "0.0.0",
   "description": "",
   "main": "./src/index.tsx",
@@ -19,8 +19,8 @@
     "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.8.1",
     "css-minimizer-webpack-plugin": "^5.0.1",
+    "dotenv-webpack": "^8.0.1",
     "esbuild-register": "^3.4.2",
-    "fs-extra": "^11.1.1",
     "html-webpack-plugin": "^5.5.3",
     "mini-css-extract-plugin": "^2.7.6",
     "sass": "^1.63.6",
