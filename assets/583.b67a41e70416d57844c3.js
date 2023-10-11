@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkstandalone_react_ts=self.webpackChunkstandalone_react_ts||[]).push([[583],{583:(e,t,n)=>{n.r(t),n.d(t,{default:()=>s});var a=n(294);const l=a.lazy((()=>Promise.all([n.e(438),n.e(798),n.e(778),n.e(187)]).then(n.bind(n,187))));function s(){return a.createElement("div",null,a.createElement(l,null))}}}]);
-//# sourceMappingURL=583.b67a41e70416d57844c3.js.map
