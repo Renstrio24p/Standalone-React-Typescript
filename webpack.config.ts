@@ -1,16 +1,17 @@
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const webpack = require('webpack');
-const path = require('path');
 
 module.exports = {
   entry: './src/index.tsx',
   output: {
-    path: path.resolve(__dirname, './dist'),
-    filename: 'assets/[name].[contenthash].js',
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'js/[name].[contenthash].js',
+    assetModuleFilename: 'assets/[name].[contenthash][ext]',
   },
   target: 'web',
   devServer: {
@@ -30,44 +31,45 @@ module.exports = {
     liveReload: true,
   },
   resolve: {
-    extensions: ['.js', '.ts', '.tsx', '.json', '.scss'],
+    extensions: ['.js', '.tsx', '.json', '.scss'],
   },
   module: {
     rules: [
       {
-        test: /\.tsx?$/,
+        test: /\.(js|jsx|ts|tsx)$/,
         exclude: /node_modules/,
-        use: [
-          {
-            loader: 'esbuild-loader',
-            options: {
-              loader: 'tsx',
-              target: 'es2015',
-            },
+        use: {
+          loader: 'esbuild-loader',
+          options: {
+            loader: 'tsx',
+            target: 'es2015',
           },
+        },
+      },
+      {
+        test: /\.json$/,
+        type: 'javascript/auto',
+        use: ['json-loader'],
+      },
+      {
+        test: /\.(sa|sc|c)ss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          'sass-loader',
         ],
-      },
-      {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader'],
-      },
-      {
-        test: /\.s[ac]ss$/i,
-        use: ['style-loader', 'css-loader', 'sass-loader'],
       },
       {
         test: /\.(png|jpe?g|gif|svg|webp)$/i,
         type: 'asset/resource',
-        generator: {
-          filename: 'images/[name].[contenthash][ext]',
-        },
       },
       {
         test: /\.(mp4|webm|ogg|ogv)$/i,
         type: 'asset/resource',
-        generator: {
-          filename: 'videos/[name].[contenthash][ext]',
-        },
+      },
+      {
+        test: /\.(woff|woff2|eot|ttf|otf)$/,
+        type: 'asset/resource',
       },
     ],
   },
@@ -75,17 +77,9 @@ module.exports = {
     minimize: true,
     minimizer: [
       new CssMinimizerPlugin(),
-      new TerserPlugin(),
     ],
     splitChunks: {
-      chunks: 'async',
-      minSize: 2000,
-      maxSize: 20000,
-      minChunks: 1,
-      maxAsyncRequests: 30,
-      maxInitialRequests: 30,
-      automaticNameDelimiter: '~',
-      enforceSizeThreshold: 50000,
+      chunks: 'all',
       cacheGroups: {
         vendors: {
           test: /[\\/]node_modules[\\/]/,
@@ -99,10 +93,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: path.join(__dirname, 'index.html'),
     }),
-    new webpack.ProvidePlugin({
-      React: 'react',
-      ReactDOM: 'react-dom',
-      'ReactRouterDOM': 'react-router-dom',
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].[contenthash].css',
     }),
     new CopyWebpackPlugin({
       patterns: [
@@ -117,6 +109,15 @@ module.exports = {
       ],
     }),
     new Dotenv(),
+    new webpack.ProvidePlugin({
+      React: 'react',
+      ReactDOM: 'react-dom',
+      ReactRouterDOM: 'react-router-dom',
+    }),
   ],
+  performance: {
+    maxAssetSize: 244000, // Set the maximum asset size
+    maxEntrypointSize: 244000, // Set the maximum entry point size
+  },
   devtool: 'source-map',
 };
