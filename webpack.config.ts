@@ -1,21 +1,15 @@
-const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const path = require('path');
 const webpack = require('webpack');
 
-module.exports = {
-  entry: './src/index.tsx',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'js/[name].[contenthash].js',
-    assetModuleFilename: 'assets/[name].[contenthash][ext]',
-  },
-  target: 'web',
-  devServer: {
-    port: 4600,
+module.exports = (env:any, argv:any) => {
+  const isProduction = argv.mode === 'production';
+  const startTime = Date.now();
+
+  const devServerOptions = {
+    port: 4500,
     proxy: {
       '/api': {
         target: 'http://localhost:8800',
@@ -27,97 +21,147 @@ module.exports = {
       directory: path.join(__dirname, 'src'),
     },
     open: true,
-    hot: true,
-    liveReload: true,
-  },
-  resolve: {
-    extensions: ['.js', '.tsx', '.json', '.scss'],
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx|ts|tsx)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'esbuild-loader',
-          options: {
-            loader: 'tsx',
-            target: 'es2015',
+    hot: !isProduction,
+    liveReload: !isProduction,
+    historyApiFallback: true,
+  };
+
+  return {
+    mode: isProduction ? 'production' : 'development',
+    entry: './src/index.tsx',
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'assets/[name].[contenthash].js',
+      chunkFilename: 'assets/[name].[contenthash].js',
+      publicPath: '/',
+    },
+    target: 'web',
+    devServer: devServerOptions,
+    resolve: {
+      extensions: ['.js','.ts', '.tsx', '.json'],
+    },
+    module: {
+      rules: [
+        {
+          test: /node_modules/,
+          use: {
+            loader: 'esbuild-loader',
+            options: {
+              target: 'es2015',
+            },
+          },
+        },
+        {
+          test: /\.tsx?$/,
+          use: {
+            loader: 'esbuild-loader',
+            options: {
+              target: 'es2015',
+              minify: true,
+            },
+          },
+        },
+        {
+          test: /\.(c|sa|sc)ss$/,
+          exclude: /\.module\.(c|sa|sc)ss$/,
+          use: [
+            'style-loader',
+            'css-loader',
+            'sass-loader',
+            {
+              loader: 'esbuild-loader',
+              options: {
+                loader: 'css',
+                minify: true,
+                target: 'es2015',
+              },
+            },
+          ],
+        },
+        {
+          test: /\.module\.(c|sa|sc)ss$/,
+          use: [
+            'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+              },
+            },
+            'sass-loader',
+            {
+              loader: 'esbuild-loader',
+              options: {
+                loader: 'css',
+                minify: true,
+                target: 'es2015',
+              },
+            },
+          ],
+        },
+        {
+          test: /\.(png|jpe?g|gif|svg|webp)$/i,
+          type: 'asset/resource',
+          generator: {
+            filename: 'images/[name].[contenthash][ext]',
+          },
+        },
+        {
+          test: /\.(mp4|webm|ogg|ogv)$/i,
+          type: 'asset/resource',
+          generator: {
+            filename: 'videos/[name].[contenthash][ext]',
+          },
+        },
+      ],
+    },
+    plugins: [
+      new HtmlWebpackPlugin({
+        template: 'index.html',
+      }),
+      new webpack.ProvidePlugin({
+        React: 'react',
+        ReactDOM: 'react-dom',
+      }),
+      new CopyWebpackPlugin({
+        patterns: [
+          {
+            from: 'src/images',
+            to: 'images',
+          },
+          {
+            from: 'src/videos',
+            to: 'videos',
+          },
+        ],
+      }),
+      new Dotenv(),
+    ],
+    optimization: {
+      minimize: isProduction,
+      splitChunks: {
+        chunks: 'async',
+        minSize: 244 * 1024, // 244 KiB
+        cacheGroups: {
+          defaultVendors: {
+            test: /[\\/]node_modules[\\/]/,
+            priority: -10,
+          },
+          default: {
+            minChunks: 2,
+            priority: -20,
+            reuseExistingChunk: true,
           },
         },
       },
-      {
-        test: /\.json$/,
-        type: 'javascript/auto',
-        use: ['json-loader'],
-      },
-      {
-        test: /\.(sa|sc|c)ss$/,
-        use: [
-          MiniCssExtractPlugin.loader,
-          'css-loader',
-          'sass-loader',
-        ],
-      },
-      {
-        test: /\.(png|jpe?g|gif|svg|webp)$/i,
-        type: 'asset/resource',
-      },
-      {
-        test: /\.(mp4|webm|ogg|ogv)$/i,
-        type: 'asset/resource',
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
-        type: 'asset/resource',
-      },
-    ],
-  },
-  optimization: {
-    minimize: true,
-    minimizer: [
-      new CssMinimizerPlugin(),
-    ],
-    splitChunks: {
-      chunks: 'all',
-      cacheGroups: {
-        vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
-          chunks: 'all',
-        },
-      },
     },
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'index.html'),
-    }),
-    new MiniCssExtractPlugin({
-      filename: 'css/[name].[contenthash].css',
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: 'src/images',
-          to: 'images',
-        },
-        {
-          from: 'src/videos',
-          to: 'videos',
-        },
-      ],
-    }),
-    new Dotenv(),
-    new webpack.ProvidePlugin({
-      React: 'react',
-      ReactDOM: 'react-dom',
-      ReactRouterDOM: 'react-router-dom',
-    }),
-  ],
-  performance: {
-    maxAssetSize: 244000, // Set the maximum asset size
-    maxEntrypointSize: 244000, // Set the maximum entry point size
-  },
-  devtool: 'source-map',
+    performance: {
+      maxAssetSize: 244000,
+      maxEntrypointSize: 244000,
+    },
+    cache: {
+      type: 'filesystem',
+    },
+    stats: 'errors-warnings',
+  };
 };
