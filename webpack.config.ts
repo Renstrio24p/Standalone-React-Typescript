@@ -4,7 +4,7 @@ const Dotenv = require('dotenv-webpack');
 const path = require('path');
 const webpack = require('webpack');
 
-module.exports = (env:any, argv:any) => {
+module.exports = (argv:any) => {
   const isProduction = argv.mode === 'production';
   const startTime = Date.now();
 
@@ -33,7 +33,7 @@ module.exports = (env:any, argv:any) => {
       path: path.resolve(__dirname, 'dist'),
       filename: 'assets/[name].[contenthash].js',
       chunkFilename: 'assets/[name].[contenthash].js',
-      publicPath: '/',
+      // publicPath: '/',
     },
     target: 'web',
     devServer: devServerOptions,
@@ -56,6 +56,7 @@ module.exports = (env:any, argv:any) => {
           use: {
             loader: 'esbuild-loader',
             options: {
+              loader: 'tsx',
               target: 'es2015',
               minify: true,
             },

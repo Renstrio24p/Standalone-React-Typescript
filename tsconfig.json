@@ -4,6 +4,8 @@
     "jsx": "react",
     "module": "esnext",
     "moduleResolution": "node",
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
     "lib": ["dom", "esnext"],
     "strict": true,
     "sourceMap": true,
