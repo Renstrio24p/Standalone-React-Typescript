@@ -6,8 +6,6 @@ const webpack = require('webpack');
 
 module.exports = (argv:any) => {
   const isProduction = argv.mode === 'production';
-  const startTime = Date.now();
-
   const devServerOptions = {
     port: 4600,
     proxy: {
