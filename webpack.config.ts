@@ -9,7 +9,7 @@ module.exports = (argv:any) => {
   const startTime = Date.now();
 
   const devServerOptions = {
-    port: 4500,
+    port: 4600,
     proxy: {
       '/api': {
         target: 'http://localhost:8800',
