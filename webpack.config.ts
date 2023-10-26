@@ -50,7 +50,7 @@ module.exports = (argv:any) => {
           },
         },
         {
-          test: /\.tsx?$/,
+          test: /\.(ts|tsx)?$/,
           use: {
             loader: 'esbuild-loader',
             options: {
