@@ -1,18 +1,20 @@
 {
   "compilerOptions": {
-    "esModuleInterop": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM"],
     "jsx": "react",
-    "module": "esnext",
+    "esModuleInterop": true,
+    "strict": true,
     "moduleResolution": "node",
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "lib": ["dom", "esnext"],
-    "strict": true,
-    "sourceMap": true,
-    "target": "esnext",
-    "plugins": [{ "name": "typescript-plugin-css-modules" }],
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "isolatedModules": false,
+    "forceConsistentCasingInFileNames": true
   },
   "exclude": ["node_modules"]
 }
