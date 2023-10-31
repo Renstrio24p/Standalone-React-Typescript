@@ -14,7 +14,8 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "isolatedModules": false,
-    "sourceRoot": "**/*"
+    "sourceRoot": "**/*",
+    "forceConsistentCasingInFileNames": true 
   },
   "exclude": ["node_modules"]
 }
