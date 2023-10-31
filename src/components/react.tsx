@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { GitImg, ReactImg, TSImg, WebpackImg } from "./Image";
+import { GitImg, ReactImg, TSImg, WebpackImg } from "./Images";
 
 type ReactTSType = number
 

@@ -1,4 +1,4 @@
-const ReactTS = React.lazy(()=>import('./components/react'))
+const ReactTS = React.lazy(()=>import('./components/React'))
 import './assets/css/app.css'
 
 export default function Start(){

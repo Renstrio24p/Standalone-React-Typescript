@@ -3,10 +3,11 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const path = require('path');
 const webpack = require('webpack');
+const TerserPlugin = require('terser-webpack-plugin');
 
 type moduleProps = {
-  mode: string
-}
+  mode: string;
+};
 
 module.exports = (argv: moduleProps) => {
   const isProduction = argv.mode === 'production';
@@ -33,37 +34,32 @@ module.exports = (argv: moduleProps) => {
     entry: './src/index.tsx',
     output: {
       path: path.resolve(__dirname, 'dist'),
-      filename: 'assets/[name].[contenthash].js',
-      chunkFilename: 'assets/[name].[contenthash].js',
-      // publicPath: '/',
+      filename: isProduction ? 'assets/[name].[contenthash].js' : 'assets/[name].js',
+      chunkFilename: isProduction ? 'assets/[name].[contenthash].js' : 'assets/[name].js',
     },
     target: 'web',
     devServer: devServerOptions,
     resolve: {
-      extensions: ['.js','.ts', '.tsx', '.json'],
+      extensions: ['.js', '.ts', '.tsx', '.json'],
     },
     module: {
       rules: [
+        
+        // JavaScript/TypeScript rule
         {
-          test: /node_modules/,
+          test: /\.(ts|tsx)$/,
+          exclude: /node_modules/,
           use: {
             loader: 'esbuild-loader',
             options: {
+              loader: 'tsx', // Specify the loader for TypeScript
               target: 'es2015',
+              // Minify in production
+              minify: isProduction,
             },
           },
         },
-        {
-          test: /\.(ts|tsx)?$/,
-          use: {
-            loader: 'esbuild-loader',
-            options: {
-              loader: 'tsx',
-              target: 'es2015',
-              minify: true,
-            },
-          },
-        },
+        // CSS rule
         {
           test: /\.(c|sa|sc)ss$/,
           exclude: /\.module\.(c|sa|sc)ss$/,
@@ -71,16 +67,9 @@ module.exports = (argv: moduleProps) => {
             'style-loader',
             'css-loader',
             'sass-loader',
-            {
-              loader: 'esbuild-loader',
-              options: {
-                loader: 'css',
-                minify: true,
-                target: 'es2015',
-              },
-            },
           ],
         },
+        // CSS modules rule
         {
           test: /\.module\.(c|sa|sc)ss$/,
           use: [
@@ -92,16 +81,9 @@ module.exports = (argv: moduleProps) => {
               },
             },
             'sass-loader',
-            {
-              loader: 'esbuild-loader',
-              options: {
-                loader: 'css',
-                minify: true,
-                target: 'es2015',
-              },
-            },
           ],
         },
+        // Image assets rule
         {
           test: /\.(png|jpe?g|gif|svg|webp)$/i,
           type: 'asset/resource',
@@ -109,6 +91,7 @@ module.exports = (argv: moduleProps) => {
             filename: 'images/[name].[contenthash][ext]',
           },
         },
+        // Video assets rule
         {
           test: /\.(mp4|webm|ogg|ogv)$/i,
           type: 'asset/resource',
@@ -142,9 +125,18 @@ module.exports = (argv: moduleProps) => {
     ],
     optimization: {
       minimize: isProduction,
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            compress: {
+              drop_console: isProduction,
+            },
+          },
+        }),
+      ],
       splitChunks: {
-        chunks: 'async',
-        minSize: 244 * 1024, // 244 KiB
+        chunks: 'all', // Split all chunks, including async and initial
+        minSize: 0, // Always split, no matter the size
         cacheGroups: {
           defaultVendors: {
             test: /[\\/]node_modules[\\/]/,
@@ -159,12 +151,15 @@ module.exports = (argv: moduleProps) => {
       },
     },
     performance: {
-      maxAssetSize: 244000,
-      maxEntrypointSize: 244000,
+      hints: isProduction ? 'warning' : false,
+      maxAssetSize: 713 * 1024, // Adjust this limit as needed
+      maxEntrypointSize: 713 * 1024, // Adjust this limit as needed
     },
     cache: {
       type: 'filesystem',
     },
     stats: 'errors-warnings',
+    // Add source maps for better debugging in development mode
+    devtool: isProduction ? 'source-map' : 'eval-source-map',
   };
 };

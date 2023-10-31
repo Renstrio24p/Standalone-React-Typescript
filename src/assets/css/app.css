@@ -49,8 +49,9 @@ img {
 
 .apps,button {
     padding: 5px 10px;
-    background-color: #444654;
+    background-color: #1c1d1d;
     border-radius: 5px;
+    color: white;
 }
 
 .buttons {
@@ -72,7 +73,6 @@ img {
 
 button {
     border: none;
-    color: white;
 }
 
 .yellow {
