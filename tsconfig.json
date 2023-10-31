@@ -15,7 +15,7 @@
     "resolveJsonModule": true,
     "isolatedModules": false,
     "sourceRoot": "**/*",
-    "forceConsistentCasingInFileNames": true 
+    "forceConsistentCasingInFileNames": false 
   },
   "exclude": ["node_modules"]
 }
