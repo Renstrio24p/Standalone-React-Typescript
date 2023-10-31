@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkstandalone_react_ts=self.webpackChunkstandalone_react_ts||[]).push([[55],{55:(e,t,n)=>{n.r(t),n.d(t,{default:()=>s});var a=n(243);const l=a.lazy((()=>n.e(731).then(n.bind(n,731))));function s(){return a.createElement("div",null,a.createElement(l,null))}}}]);
