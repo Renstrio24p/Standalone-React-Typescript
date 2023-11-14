@@ -9,8 +9,18 @@ type moduleProps = {
   mode: string;
 };
 
+const isReactRouterDomUsed = (() => {
+  try {
+    require.resolve('react-router-dom');
+    return true;
+  } catch (error) {
+    return false;
+  }
+})();
+
 module.exports = (argv: moduleProps) => {
   const isProduction = argv.mode === 'production';
+  const publicPath = isReactRouterDomUsed ? '/' : null;
   const devServerOptions = {
     port: 4600,
     proxy: {
@@ -22,6 +32,7 @@ module.exports = (argv: moduleProps) => {
     },
     static: {
       directory: path.join(__dirname, 'src'),
+      publicPath
     },
     open: true,
     hot: !isProduction,
@@ -36,6 +47,7 @@ module.exports = (argv: moduleProps) => {
       path: path.resolve(__dirname, 'dist'),
       filename: isProduction ? 'assets/[name].[contenthash].js' : 'assets/[name].js',
       chunkFilename: isProduction ? 'assets/[name].[contenthash].js' : 'assets/[name].js',
+      publicPath
     },
     target: 'web',
     devServer: devServerOptions,
@@ -45,7 +57,7 @@ module.exports = (argv: moduleProps) => {
     module: {
       rules: [
         
-        // JavaScript/TypeScript rule
+        // TypeScript rule
         {
           test: /\.(ts|tsx)$/,
           exclude: /node_modules/,
