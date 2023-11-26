@@ -18,7 +18,7 @@ const isReactRouterDomUsed = (() => {
 
 module.exports = (argv: moduleProps) => {
   const isProduction = argv.mode === 'production';
-  const publicPath = isReactRouterDomUsed ? '/' : null;
+  const publicPath = isReactRouterDomUsed ? '/' : '';
 
   return {
     mode: isProduction ? 'production' : 'development',
